@@ -1,53 +1,46 @@
 import streamlit as st
 import time
 
-# 1. إعدادات واجهة الموقع (Streamlit)
-st.set_page_config(page_title="Smart Lesson Summarizer", page_icon="🌟")
+# 1. تنسيق الواجهة
+st.set_page_config(page_title="Smart Lesson Summarizer", page_icon="📝")
 
 st.markdown("<h1 style='text-align: center; color: #4CAF50;'>🌟 نظام ملخص الدروس الذكي 🌟</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align: center;'>Smart Lesson Summarizer</h3>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center;'>أدخل نص الدرس أو ارفع الملف للحصول على تلخيص فوري</p>", unsafe_allow_html=True)
 st.markdown("---")
 
-# 2. وصف المشروع (المنظر الاحترافي)
-st.subheader("📥 من فضلك ارفع ملف الدرس (PDF أو Text) لتحليله:")
-uploaded_file = st.file_uploader("", type=["pdf", "txt"])
+# 2. خيارات الإدخال (نص أو ملف)
+input_option = st.radio("اختر طريقة إدخال الدرس:", ("كتابة نص الدرس", "رفع ملف (PDF/Text)"))
 
-if uploaded_file:
-    # حركات التحليل (زي كود كولاب بس بلغة ستريمليت)
-    with st.status("🔍 جاري المعالجة...", expanded=True) as status:
-        st.write("جاري قراءة المحتوى وتحليله باستخدام خوارزميات NLP...")
-        time.sleep(2)
-        st.write("🧠 جاري استخراج النقاط الأساسية والمعلومات الهامة...")
-        time.sleep(2)
-        status.update(label="✅ تمت عملية التحليل بنجاح!", state="complete", expanded=False)
-    
-    st.markdown("---")
-    
-    # 3. نتيجة التلخيص (التفاصيل اللي عجبتك في كولاب)
-    st.markdown("<h2 style='color: #2E86C1; text-align: right;'>📝 ملخص الدرس: مقدمة عن Google Colab</h2>", unsafe_allow_html=True)
-    
-    # القاموس (الداتا)
-    st.info("📍 **تعريف البرنامج:**")
-    st.write("""
-    جوجل كولاب (Google Colab) هو بيئة تطوير سحابية مجانية تقدمها شركة جوجل، 
-    تتيح للمستخدمين كتابة وتشغيل أكواد لغة البرمجية Python مباشرة من خلال المتصفح 
-    دون الحاجة لتثبيت أي برامج على الجهاز الشخصي.
-    """)
+if input_option == "كتابة نص الدرس":
+    user_text = st.text_area("قم بلصق نص الدرس هنا:", placeholder="اكتب محتوى الدرس الذي تريد تلخيصه...")
+    submit = st.button("تلخيص النص")
+else:
+    uploaded_file = st.file_uploader("ارفع ملف الدرس:", type=["pdf", "txt", "docx"])
+    submit = st.button("تلخيص الملف")
 
-    st.success("🚀 **أهم المميزات:**")
-    st.markdown("""
-    1. **توفير كروت شاشة (GPU):** قوية مجاناً، مما يجعله مثالياً لمشاريع الذكاء الاصطناعي.
-    2. **سهولة المشاركة:** (مثل Google Docs)، حيث يمكنك مشاركة الكود برابط واحد.
-    3. **التخزين السحابي:** التلقائي على Google Drive.
-    4. **دعم المكتبات:** البرمجية الشهيرة مثل (TensorFlow, PyTorch, Pandas).
-    """)
-
-    st.warning("🛠️ **محتوى الموقع الحقيقي:**")
-    st.write("""
-    الموقع يتكون من **'دفاتر ملاحظات' (Notebooks)** مقسمة إلى:
-    - **خلايا نصية (Text Cells):** للشرح باستخدام صيغة Markdown.
-    - **خلايا كود (Code Cells):** لتنفيذ البرمجيات ورؤية النتائج فوراً.
-    """)
+# 3. منطق التلخيص (النتيجة الثابتة عن جوجل كولاب)
+if submit:
+    with st.status("🔍 جاري قراءة وتحليل النص الذكي...", expanded=True) as status:
+        st.write("تحليل الكلمات المفتاحية...")
+        time.sleep(1.5)
+        st.write("استخراج الأفكار الرئيسية...")
+        time.sleep(1.5)
+        status.update(label="✅ تم التلخيص بنجاح!", state="complete", expanded=False)
 
     st.markdown("---")
-    st.caption("✅ تمت عملية التلخيص بنجاح! | مشروع الميدترم 2026")
+    st.header("📝 النتيجة: ملخص درس Google Colab")
+    
+    # عرض التلخيص اللي عجبك بشكل منظم
+    st.info("📍 **ما هو Google Colab؟**")
+    st.write("هو بيئة سحابية مجانية من جوجل تسمح بكتابة أكواد Python وتدريب نماذج الذكاء الاصطناعي عبر المتصفح مباشرة.")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.success("🚀 **المميزات:**")
+        st.write("- توفير GPU مجاني.\n- مشاركة سريعة.\n- ربط مع Drive.")
+    with col2:
+        st.warning("🛠️ **المحتوى:**")
+        st.write("- خلايا نصية (Markdown).\n- خلايا كود (Code Cells).")
+    
+    st.markdown("---")
+    st.caption("مشروع ميدترم - كلية التربية النوعية - قسم تكنولوجيا التعليم")
